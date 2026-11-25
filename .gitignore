@@ -1,5 +1,7 @@
-myvenv
+myvenv/
 
 .env
 
-E:\HR_Policy_Assistant\data\faiss_index
+data/faiss_index/
+
+__pycache__/
