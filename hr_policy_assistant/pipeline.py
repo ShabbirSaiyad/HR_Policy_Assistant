@@ -21,6 +21,8 @@ from hr_policy_assistant.vector_store import (
     save_vector_store
 )
 
+from hr_policy_assistant.guardrails import REFUSAL_MESSAGE, check_input, check_output
+
 from hr_policy_assistant import get_logger
 from hr_policy_assistant.tracing import check_langsmith_tracing
 
@@ -77,8 +79,21 @@ def ask(agent, question: str) -> str:
 
     logger.info("User question: %s", question)
 
+    #input guards to give safe inputs to LLM
+    input_is_safe, _ = check_input(question)
+    # 1/0 and reason (_ is usede for reason)
+    if not input_is_safe:
+        return REFUSAL_MESSAGE
+
     response = agent.invoke({"messages": [{"role": "user", "content": question}]})
     answer = response["messages"][-1].content    
-
+    
     logger.info("Final answer: %s", answer)
+
+    #output guard to check if agent give safe answer  
+
+    output_is_safe, _ = check_output(answer)
+    if not output_is_safe:
+        return REFUSAL_MESSAGE
+      
     return answer
