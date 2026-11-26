@@ -17,10 +17,12 @@ from hr_policy_assistant.vector_store import (
     get_retriever,
     load_vector_store,
     vector_store_exists,
+    vector_store_is_stale,
     save_vector_store
 )
 
 from hr_policy_assistant import get_logger
+from hr_policy_assistant.tracing import check_langsmith_tracing
 
 logger = get_logger(__name__)
 
@@ -28,13 +30,17 @@ logger = get_logger(__name__)
 def build_vector_store_for_document(file_path: str = config.DATA_FILE_PATH):
     """Load + split + embed the document, 
     reusing the saved faiss index if we have one."""
-    if vector_store_exists():
-        print("Found an saved vector store on disk, loading to it (fast, no re-embedding).")
-        logger.info("Vector stored already exists, reusing it")
+    if vector_store_exists() and not vector_store_is_stale(file_path):
+        print("Found a saved vector store on disk, loading it (fast, no re-embedding).")
+        logger.info("Vector store already exists, reusing it")
         return load_vector_store()
 
-    print("No saved vector store found, building one from scratch...")
-    logger.info("No saved vector store found on disk, building one from scratch... ")
+    if vector_store_exists():
+        print("Policy document changed since the index was saved, rebuilding it...")
+        logger.info("Saved vector store is older than '%s', rebuilding", file_path)
+    else:
+        print("No saved vector store found, building one from scratch...")
+        logger.info("No saved vector store found on disk, building one from scratch...")
     documents = load_document(file_path)
     chunks = split_into_chunks(documents)
     print(f"Loaded '{file_path}' and split it into {len(chunks)} chunks.")
@@ -50,6 +56,7 @@ def build_hr_assistant(file_path: str = config.DATA_FILE_PATH):
 
     logger.info("Building HR Assistant.")
     config.check_api_keys()
+    check_langsmith_tracing()
 
 
     vector_store = build_vector_store_for_document(file_path)
@@ -69,9 +76,9 @@ def ask(agent, question: str) -> str:
     return its final answer as plain text."""
 
     logger.info("User question: %s", question)
-    
+
     response = agent.invoke({"messages": [{"role": "user", "content": question}]})
     answer = response["messages"][-1].content    
 
-    logger.info("Final answer: % s", answer)
+    logger.info("Final answer: %s", answer)
     return answer

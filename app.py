@@ -46,7 +46,14 @@ if question:
         st.markdown(question)
 
     with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            answer = ask(agent, question)
+        try:
+            with st.spinner("Thinking..."):
+                answer = ask(agent, question)
+        except Exception:
+            # e.g. network drop, rate limit, or invalid API key.
+            # Show a friendly message instead of crashing the whole page.
+            logger.exception("Failed to answer question: %s", question)
+            st.error("Sorry, something went wrong while answering. Please try again.")
+            st.stop()
         st.markdown(answer)
     st.session_state.messages.append({"role": "assistant", "content": answer})

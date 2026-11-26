@@ -10,7 +10,9 @@ import os
 from datetime import datetime
 
 
-LOGS_DIR = "logs"
+# logs/ always sits in the project root, whichever folder you run from.
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+LOGS_DIR = os.path.join(_PROJECT_ROOT, "logs")
 
 # One folder per day (e.g. logs/26_November_2026/), and inside it
 # one log file per run, named with the time the run started.

@@ -10,13 +10,11 @@ logger = get_logger(__name__)
 
 def build_vector_store(chunks):
     """ Embed every chunk and build a searchable FAISS index in memory."""
-    logger.info(
-        "Embedding %d chunk(s) and uploading to buiding FAISS index ...",
-        len(chunks)
-    )
+    logger.info("Embedding %d chunk(s) and building FAISS index ...", len(chunks))
     embeddings_model = get_embeddings_model()
+    vector_store = FAISS.from_documents(chunks, embeddings_model)
     logger.info("FAISS index built in memory")
-    return FAISS.from_documents(chunks, embeddings_model)
+    return vector_store
 
 # save vector store
 def save_vector_store(vector_store, path: str = config.VECTOR_STORE_PATH) -> None:
@@ -35,6 +33,16 @@ def load_vector_store(path: str = config.VECTOR_STORE_PATH):
 def vector_store_exists(path: str = config.VECTOR_STORE_PATH) -> bool:
     """ Check if a saved FAISS index already exists on disk."""
     return os.path.exists(os.path.join(path,"index.faiss"))
+
+
+def vector_store_is_stale(
+    data_file_path: str = config.DATA_FILE_PATH,
+    path: str = config.VECTOR_STORE_PATH,
+) -> bool:
+    """True if the policy document was edited after the index was saved,
+    meaning the saved index holds old content and must be rebuilt."""
+    index_file = os.path.join(path, "index.faiss")
+    return os.path.getmtime(data_file_path) > os.path.getmtime(index_file)
 
 def get_retriever(vector_store, k: int = config.TOP_K_RESULTS):
     """Turn a vector store into a retriever

@@ -1,26 +1,38 @@
 """All settings for the app live here, in one place."""
 
 
-import os 
+import os
 from dotenv import load_dotenv
 
-load_dotenv()
+# Project root folder (the one that contains data/, .env, app.py).
+# All paths are built from here so the app works no matter which
+# folder you run it from.
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+load_dotenv(os.path.join(PROJECT_ROOT, ".env"))
 
 ## ENV VAR - LLMS 
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 JINA_API_KEY = os.getenv("JINA_API_KEY")
 
+# Tracing
+LANGSMITH_TRACING = os.getenv("LANGSMITH_TRACING", "false")
+LANGSMITH_ENDPOINT = os.getenv("LANGSMITH_ENDPOINT")
+LANGSMITH_API_KEY = os.getenv("LANGSMITH_API_KEY")
+LANGSMITH_PROJECT = os.getenv("LANGSMITH_PROJECT")
+
+
 ## DEFINE PATH - DATA / VECTOR STORE 
 
-DATA_FILE_PATH = os.path.join("data", "hr_policy.txt")
+DATA_FILE_PATH = os.path.join(PROJECT_ROOT, "data", "hr_policy.txt")
 
 ## VECTORE STORES 
 
 # IN MEMORY 
 # persistent memory - vectors # 100gb - ingestion 
 # cloud memory 
-VECTOR_STORE_PATH = os.path.join("data","faiss_index")
+VECTOR_STORE_PATH = os.path.join(PROJECT_ROOT, "data", "faiss_index")
 
 ## MODELS 
 # LLM and EMBEDING MODEL 
