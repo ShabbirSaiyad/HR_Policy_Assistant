@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 780" width="960" height="780" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#DC2626"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#16A34A"/>
+    </marker>
+    <style>
+      .box { stroke-width: 2; rx: 10; }
+      .t { font-size: 15px; fill: #0F172A; text-anchor: middle; dominant-baseline: middle; }
+      .tb { font-size: 15px; font-weight: 600; fill: #0F172A; text-anchor: middle; dominant-baseline: middle; }
+      .ts { font-size: 12.5px; fill: #475569; text-anchor: middle; dominant-baseline: middle; }
+      .lbl { font-size: 13px; font-weight: 600; dominant-baseline: middle; }
+      .line { stroke: #475569; stroke-width: 2; fill: none; }
+    </style>
+  </defs>
+
+  <!-- background (keeps it readable in GitHub dark mode) -->
+  <rect x="0" y="0" width="960" height="780" fill="#FFFFFF"/>
+
+  <!-- ================= One-time setup ================= -->
+  <rect x="40" y="30" width="880" height="130" rx="14" fill="#F8FAFF" stroke="#6366F1" stroke-width="2" stroke-dasharray="7 5"/>
+  <rect x="60" y="20" width="160" height="22" rx="6" fill="#6366F1"/>
+  <text x="140" y="32" class="lbl" fill="#FFFFFF" text-anchor="middle" style="fill:#fff">ONE-TIME SETUP</text>
+
+  <g>
+    <rect class="box" x="60"  y="72" width="140" height="56" fill="#EEF2FF" stroke="#6366F1"/>
+    <text class="tb" x="130" y="100">hr_policy.txt</text>
+
+    <rect class="box" x="235" y="72" width="140" height="56" fill="#EEF2FF" stroke="#6366F1"/>
+    <text class="tb" x="305" y="100">Load</text>
+
+    <rect class="box" x="410" y="72" width="140" height="56" fill="#EEF2FF" stroke="#6366F1"/>
+    <text class="tb" x="480" y="100">Split into chunks</text>
+
+    <rect class="box" x="585" y="72" width="140" height="56" fill="#EEF2FF" stroke="#6366F1"/>
+    <text class="tb" x="655" y="92">Embed</text>
+    <text class="ts" x="655" y="111">Jina embeddings</text>
+
+    <rect class="box" x="760" y="72" width="140" height="56" fill="#E0E7FF" stroke="#4F46E5"/>
+    <text class="tb" x="830" y="92">FAISS</text>
+    <text class="ts" x="830" y="111">vector store</text>
+
+    <line class="line" x1="200" y1="100" x2="233" y2="100" marker-end="url(#arrow)"/>
+    <line class="line" x1="375" y1="100" x2="408" y2="100" marker-end="url(#arrow)"/>
+    <line class="line" x1="550" y1="100" x2="583" y2="100" marker-end="url(#arrow)"/>
+    <line class="line" x1="725" y1="100" x2="758" y2="100" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- FAISS feeds the tool -->
+  <line x1="830" y1="128" x2="830" y2="398" stroke="#4F46E5" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+  <text x="820" y="270" class="lbl" fill="#4F46E5" text-anchor="end" style="fill:#4F46E5">similarity search</text>
+
+  <!-- ================= Request flow ================= -->
+  <!-- 1. User question -->
+  <rect class="box" x="340" y="210" width="280" height="56" fill="#F1F5F9" stroke="#64748B"/>
+  <text class="tb" x="480" y="238">User question</text>
+
+  <!-- 2. Input guardrail -->
+  <rect class="box" x="340" y="300" width="280" height="56" fill="#FEF3C7" stroke="#D97706"/>
+  <text class="tb" x="480" y="238" dy="90">Input guardrail</text>
+
+  <!-- 3. AI agent -->
+  <rect class="box" x="340" y="400" width="280" height="56" fill="#F3E8FF" stroke="#9333EA"/>
+  <text class="tb" x="480" y="420">AI agent</text>
+  <text class="ts" x="480" y="439">Groq LLM</text>
+
+  <!-- Tool -->
+  <rect class="box" x="690" y="400" width="230" height="56" fill="#DCFCE7" stroke="#16A34A"/>
+  <text class="tb" x="805" y="420" style="font-family: Consolas, Menlo, monospace">search_hr_policy</text>
+  <text class="ts" x="805" y="439">tool</text>
+
+  <!-- 4. Answer drafted -->
+  <rect class="box" x="340" y="500" width="280" height="56" fill="#F1F5F9" stroke="#64748B"/>
+  <text class="tb" x="480" y="520">Answer written from</text>
+  <text class="tb" x="480" y="539">retrieved policy text</text>
+
+  <!-- 5. Output guardrail -->
+  <rect class="box" x="340" y="600" width="280" height="56" fill="#FEF3C7" stroke="#D97706"/>
+  <text class="tb" x="480" y="628">Output guardrail</text>
+
+  <!-- 6. Final answer -->
+  <rect class="box" x="340" y="700" width="280" height="56" fill="#DCFCE7" stroke="#16A34A"/>
+  <text class="tb" x="480" y="728">Answer shown to the user</text>
+
+  <!-- Refusals -->
+  <rect class="box" x="40" y="300" width="240" height="56" fill="#FEE2E2" stroke="#DC2626"/>
+  <text class="t" x="160" y="318" style="font-style:italic">“Sorry, I can't help</text><text class="t" x="160" y="338" style="font-style:italic">with that request.”</text>
+  <rect class="box" x="40" y="600" width="240" height="56" fill="#FEE2E2" stroke="#DC2626"/>
+  <text class="t" x="160" y="618" style="font-style:italic">“Sorry, I can't help</text><text class="t" x="160" y="638" style="font-style:italic">with that request.”</text>
+
+  <!-- vertical arrows -->
+  <line class="line" x1="480" y1="266" x2="480" y2="298" marker-end="url(#arrow)"/>
+  <line x1="480" y1="356" x2="480" y2="398" stroke="#16A34A" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <text x="492" y="377" class="lbl" fill="#16A34A" style="fill:#16A34A">safe</text>
+  <line class="line" x1="480" y1="456" x2="480" y2="498" marker-end="url(#arrow)"/>
+  <line class="line" x1="480" y1="556" x2="480" y2="598" marker-end="url(#arrow)"/>
+  <line x1="480" y1="656" x2="480" y2="698" stroke="#16A34A" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <text x="492" y="677" class="lbl" fill="#16A34A" style="fill:#16A34A">safe</text>
+
+  <!-- unsafe branches -->
+  <line x1="340" y1="328" x2="282" y2="328" stroke="#DC2626" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <text x="311" y="314" class="lbl" fill="#DC2626" text-anchor="middle" style="fill:#DC2626">unsafe</text>
+  <line x1="340" y1="628" x2="282" y2="628" stroke="#DC2626" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <text x="311" y="614" class="lbl" fill="#DC2626" text-anchor="middle" style="fill:#DC2626">unsafe</text>
+
+  <!-- agent <-> tool -->
+  <line class="line" x1="620" y1="418" x2="688" y2="418" marker-end="url(#arrow)"/>
+  <text x="654" y="406" class="ts">calls</text>
+  <line class="line" x1="690" y1="440" x2="622" y2="440" marker-end="url(#arrow)"/>
+  <text x="655" y="472" class="ts">top 3 chunks</text>
+</svg>
