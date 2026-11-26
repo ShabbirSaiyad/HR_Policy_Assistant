@@ -5,9 +5,14 @@ Run with:  python main.py
 
 from hr_policy_assistant.pipeline import ask , build_hr_assistant
 
+from hr_policy_assistant import get_logger
+
+logger = get_logger(__name__)
+
 
 def main():
 
+    logger.info("=== CLI run started ===")
     print("Building the HR policy assistant...")
     agent = build_hr_assistant()
     print("Assistant ready!\n")
@@ -26,6 +31,8 @@ def main():
         print("ANSWER:", answer)
         print("=" * 60)
         print()
+
+    logger.info("=== CLI run finished ===")
         
 
 

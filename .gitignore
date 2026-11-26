@@ -5,3 +5,5 @@ myvenv/
 data/faiss_index/
 
 __pycache__/
+
+logs/
